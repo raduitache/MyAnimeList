@@ -17,13 +17,12 @@ fun MainNavigation(viewModel: MainNavigationViewModel = hiltViewModel()) {
 
     Scaffold(
         bottomBar = {
-            if (!viewModel.mainNavGraphs.map { it.graphRoute.route }
-                    .contains(currentBackStackEntry?.destination?.route)) return@Scaffold
+            if (!viewModel.mainNavGraphs.map { it.graphRoute.route }.any { currentBackStackEntry?.destination?.route?.startsWith(it) == true }) return@Scaffold
 
             NavigationBar {
-                for (navGraph in viewModel.mainNavGraphs) {
+                for (navGraph in viewModel.mainNavGraphs.sortedBy { it.navItemIndex }) {
                     navGraph.NavigationItem(
-                        selected = currentBackStackEntry?.destination?.route == navGraph.graphRoute.route,
+                        selected = currentBackStackEntry?.destination?.route?.startsWith(navGraph.graphRoute.route) == true,
                         rowScope = this
                     )
                 }

@@ -21,6 +21,8 @@ class SeasonalNavGraphImpl @Inject constructor(
     private val startDestination: SeasonalNavRoute,
     private val navController: NavController,
 ) : SeasonalNavGraph(graphRoute, startDestination) {
+    override val navItemIndex: Int = 1
+
     @Composable
     override fun NavigationItem(selected: Boolean, rowScope: RowScope) {
         val label = stringResource(id = R.string.seasonal_title)
