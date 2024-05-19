@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation)
     implementation(libs.androidx.paging.common.ktx)
     implementation(libs.androidx.paging.compose)
+    implementation(libs.firebase.auth)
     kapt(libs.dagger.hilt.compiler)
     testImplementation(libs.junit)
     kaptTest(libs.dagger.hilt.compiler)

@@ -16,6 +16,8 @@ hiltNavigationCompose = "1.2.0"
 pagingCommonKtx = "3.2.1"
 pagingCompose = "3.2.1"
 retrofit2 = "2.11.0"
+googleGmsGoogleServices = "4.4.1"
+firebaseAuth = "23.0.0"
 
 [libraries]
 dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
@@ -42,6 +44,7 @@ androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navig
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-paging-common-ktx = { group = "androidx.paging", name = "paging-common-ktx", version.ref = "pagingCommonKtx" }
 androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "pagingCompose" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
