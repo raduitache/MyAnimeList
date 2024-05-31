@@ -25,10 +25,15 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+
+        debug {
+            isDebuggable = true
         }
     }
     compileOptions {
@@ -40,6 +45,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -70,6 +76,23 @@ dependencies {
     implementation(libs.androidx.hilt.navigation)
     implementation(libs.androidx.paging.common.ktx)
     implementation(libs.androidx.paging.compose)
+
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.room.compiler3)
+
+    // To use Kotlin annotation processing tool (kapt)
+    //noinspection KaptUsageInsteadOfKsp
+    kapt(libs.androidx.room.room.compiler3)
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation(libs.androidx.room.ktx)
+    // optional - Guava support for Room, including Optional and ListenableFuture
+    implementation(libs.androidx.room.guava)
+    // optional - Test helpers
+    testImplementation(libs.androidx.room.testing)
+    // optional - Paging 3 Integration
+    implementation(libs.androidx.room.paging)
+
+    implementation (libs.argon2kt)
     kapt(libs.dagger.hilt.compiler)
     testImplementation(libs.junit)
     kaptTest(libs.dagger.hilt.compiler)

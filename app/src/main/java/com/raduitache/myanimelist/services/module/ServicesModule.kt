@@ -1,5 +1,9 @@
 package com.raduitache.myanimelist.services.module
 
+import android.content.Context
+import androidx.room.Room
+import com.raduitache.myanimelist.MainApplication
+import com.raduitache.myanimelist.services.db.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,4 +31,13 @@ object ServicesModule {
                     .build()
             )
             .build()
+
+    @Provides
+    fun provideAppContext(): Context = MainApplication.appContext
+
+    @Provides
+    fun provideDb(context: Context): AppDatabase = Room.databaseBuilder(
+        context,
+        AppDatabase::class.java, "database-name"
+    ).fallbackToDestructiveMigration().build()
 }

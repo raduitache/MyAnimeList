@@ -1,0 +1,221 @@
+package com.raduitache.myanimelist.auth.impl
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.raduitache.myanimelist.BuildConfig
+import com.raduitache.myanimelist.auth.AuthNavRoute
+import kotlinx.coroutines.delay
+import javax.inject.Inject
+
+class AuthNavRouteImpl @Inject constructor() : AuthNavRoute("auth/auth-screen", emptyList()) {
+
+    @Composable
+    override fun Content() {
+        val authViewModel: AuthViewModel = hiltViewModel()
+        val state = authViewModel.authViewState.collectAsState().value
+
+        var email by remember {
+            mutableStateOf("")
+        }
+
+        var password by remember {
+            mutableStateOf("")
+        }
+
+        var username by remember {
+            mutableStateOf("")
+        }
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .size(width = 128.dp, height = 64.dp)
+                        .background(Color.Red)
+                )
+                Box(modifier = Modifier.heightIn(min = 120.dp))
+                TextField(value = email, label = {
+                    Text(text = "Email")
+                },
+                    onValueChange = {
+                        email = it
+
+                    })
+                Spacer(Modifier.size(4.dp))
+                TextField(value = password,
+                    label = {
+                        Text(text = "Password")
+                    },
+                    visualTransformation = { text ->
+                        val transformedText = text.toString()
+                            .mapIndexed { index, c ->
+                                "*"
+                            }
+                            .joinToString("")
+                        TransformedText(
+                            text = AnnotatedString(text = transformedText),
+                            offsetMapping = OffsetMapping.Identity
+                        )
+                    },
+                    onValueChange = {
+                        password = it
+
+                    })
+                if (state.isSigningUp) {
+                    Spacer(Modifier.size(4.dp))
+                    TextField(
+                        value = username,
+                        label = {
+                            Text(text = "Username")
+                        },
+                        onValueChange = {
+                            username = it
+                        }
+                    )
+                }
+                Spacer(Modifier.size(8.dp))
+                if (state.isLoading) {
+                    CircularProgressIndicator()
+                } else if (!state.shouldNavigateNext) {
+                    ElevatedButton(onClick = {
+                        if (state.isSigningUp) {
+                            authViewModel.signUp(
+                                email = email,
+                                password = password,
+                                username = username
+                            )
+                        } else {
+                            authViewModel.login(
+                                email = email,
+                                password = password
+                            )
+                        }
+                    }) {
+                        Text(text = "Start")
+                    }
+                }
+
+
+                state.hadError?.message?.let {
+                    Spacer(Modifier.size(4.dp))
+                    Text(text = it, style = TextStyle(color = MaterialTheme.colorScheme.error))
+                }
+
+                if (state.shouldNavigateNext) {
+                    Spacer(Modifier.size(4.dp))
+                    Text(
+                        text = "Operation successful, you will be redirected shortly",
+                        style = TextStyle(color = MaterialTheme.colorScheme.secondary)
+                    )
+                    LaunchedEffect(key1 = Unit) {
+                        delay(1500)
+
+                    }
+                }
+
+                Box(modifier = Modifier.heightIn(min = 120.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    Button(onClick = { /*TODO*/ }) {
+                        Text("L1")
+                    }
+                    Button(onClick = { authViewModel.toggleSigningUp() }) {
+                        Text("L2")
+                    }
+                    Button(onClick = { /*TODO*/ }) {
+                        Text("L3")
+                    }
+                    if (BuildConfig.DEBUG) {
+                        Button(onClick = { authViewModel.toggleUserList() }) {
+                            Text("User list")
+                        }
+                    }
+                }
+                Box(modifier = Modifier.heightIn(min = 120.dp))
+            }
+
+            state.users?.let {
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(4.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text("Username", modifier = Modifier.weight(1f))
+                        Text("Email", modifier = Modifier.weight(1f))
+                        Text("Password", modifier = Modifier.weight(1f))
+                    }
+                }
+                items(it) { user ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(4.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Text(user.username, modifier = Modifier.weight(1f))
+                        Text(user.email, modifier = Modifier.weight(1f))
+                        Text(
+                            user.password,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1, modifier = Modifier.weight(1f)
+                        )
+                    }
+
+                }
+            }
+
+        }
+
+
+    }
+}
