@@ -1,5 +1,6 @@
 package com.raduitache.myanimelist.auth.impl
 
+import android.widget.Button
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,11 +40,14 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.raduitache.myanimelist.BuildConfig
+import com.raduitache.myanimelist.R
 import com.raduitache.myanimelist.auth.AuthNavRoute
 import kotlinx.coroutines.delay
 import javax.inject.Inject
+import kotlin.math.min
 
 class AuthNavRouteImpl @Inject constructor() : AuthNavRoute("auth/auth-screen", emptyList()) {
 
@@ -160,7 +164,8 @@ class AuthNavRouteImpl @Inject constructor() : AuthNavRoute("auth/auth-screen", 
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Button(onClick = { /*TODO*/ }) {
                         Text("L1")
@@ -172,9 +177,19 @@ class AuthNavRouteImpl @Inject constructor() : AuthNavRoute("auth/auth-screen", 
                         Text("L3")
                     }
                     if (BuildConfig.DEBUG) {
-                        Button(onClick = { authViewModel.toggleUserList() }) {
-                            Text("User list")
-                        }
+                        AndroidView(
+                            modifier = Modifier.widthIn(max = 128.dp).heightIn(max = 128.dp), // Occupy the max size in the Compose UI tree
+                            factory = { context ->
+                                // Creates view
+                                Button(context).apply {
+                                    setOnClickListener {
+                                        authViewModel.toggleUserList()
+                                    }
+                                    setBackgroundResource(R.drawable.selector)
+                                }
+                            },
+
+                        )
                     }
                 }
                 Box(modifier = Modifier.heightIn(min = 120.dp))
