@@ -18,6 +18,12 @@ Screen - Just displays data on the screen.
 ViewModel - Provides the screen with data to display and handles business logic. Very often that'll just mean calling the appropriate services and structuring the data for the screen to use.
 Navigation Graph - its responsibility is defining navigation. It's the only element out of all the others mentioned above that should know about the Navigation Controller. If screens need to navigate from one another, the navigation is restricted and provided by the Navigation Graph, through lambdas. Such lambdas will be given as parameters to the Content composable of the Navigation Routes when the graph is defined.
 
+#### An important note
+
+Given the time limitations and the lifetime of the project, the navigation infrastructure is not as complete as desired. This results in a limitation: all the Navigation Routes of a Navigation Graph should have their routes start with the route of the Graph route.
+
+For example: If the graph route is "Feature", it is mandatory that the navigation route is of the form "Feature/whatever".
+
 #### Another important note
 
 The separation between API and implementation has considerable implications, both from a build time point of view, as well as a testability point of view. APIs should only depend on other APIs, and maybe simple data classes, and implementations should, as well, only depend on APIs and simple data classes. As a result, the structure of any new feature should be the following
