@@ -9,10 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun MainNavigation(viewModel: MainNavigationViewModel = hiltViewModel()) {
-    val navController = viewModel.navController
+    val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
     Scaffold(
@@ -23,7 +24,8 @@ fun MainNavigation(viewModel: MainNavigationViewModel = hiltViewModel()) {
                 for (navGraph in viewModel.mainNavGraphs.sortedBy { it.navItemIndex }) {
                     navGraph.NavigationItem(
                         selected = currentBackStackEntry?.destination?.route?.startsWith(navGraph.graphRoute.route) == true,
-                        rowScope = this
+                        rowScope = this,
+                        navController = navController,
                     )
                 }
             }
@@ -35,7 +37,7 @@ fun MainNavigation(viewModel: MainNavigationViewModel = hiltViewModel()) {
             modifier = Modifier.padding(it)
         ) {
             for (navGraph in viewModel.navGraphs) {
-                navGraph.addToNavGraph(this)
+                navGraph.addToNavGraph(this, navController)
             }
         }
     }

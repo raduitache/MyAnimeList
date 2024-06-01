@@ -19,12 +19,11 @@ import javax.inject.Inject
 class SeasonalNavGraphImpl @Inject constructor(
     graphRoute: SeasonalGraphRoute,
     private val startDestination: SeasonalNavRoute,
-    private val navController: NavController,
 ) : SeasonalNavGraph(graphRoute, startDestination) {
     override val navItemIndex: Int = 1
 
     @Composable
-    override fun NavigationItem(selected: Boolean, rowScope: RowScope) {
+    override fun NavigationItem(selected: Boolean, rowScope: RowScope, navController: NavController) {
         val label = stringResource(id = R.string.seasonal_title)
 
         MainNavigationBarItem(
@@ -36,7 +35,7 @@ class SeasonalNavGraphImpl @Inject constructor(
         )
     }
 
-    override fun NavGraphBuilder.buildNestedNavGraph() {
+    override fun NavGraphBuilder.buildNestedNavGraph(navController: NavController) {
         composable(startDestination.route, startDestination.namedNavArgs) {
             startDestination.Content()
         }
