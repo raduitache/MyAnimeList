@@ -1,6 +1,7 @@
 [versions]
 argon2kt = "1.5.0"
 agp = "8.4.1"
+coilCompose = "2.6.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -30,6 +31,7 @@ androidx-room-room-compiler3 = { module = "androidx.room:room-compiler", version
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomPaging" }
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "roomPaging" }
 argon2kt = { module = "com.lambdapioneer.argon2kt:argon2kt", version.ref = "argon2kt" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2"}
 retrofit2-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit2"}

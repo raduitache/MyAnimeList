@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -66,13 +67,13 @@ object ServicesModule {
                                 val originalRequest = chain.request()
                                 val response = chain.proceed(originalRequest)
                                 // Check if the response indicates that the access token is expired
-                                if (response.code() != 401) return@addInterceptor response
+                                if (response.code != 401) return@addInterceptor response
 
                                 // Call the refresh token API to obtain a new access token
                                 val newAuthData = runBlocking(Dispatchers.IO) {
                                     val client = OkHttpClient()
                                     val requestBody = RequestBody.create(
-                                        MediaType.parse("application/x-www-form-urlencoded"),
+                                        "application/x-www-form-urlencoded".toMediaTypeOrNull(),
                                         "client_id=98ed5bd620cb5e1182e416e994b5b62f" +
                                                 "&client_secret=82c79106d56636edb358e5045db6f2985e243d3509c7f41e507dda9180024b07" +
                                                 "&grant_type=refresh_token" +
@@ -83,7 +84,7 @@ object ServicesModule {
                                         .url("https://myanimelist.net/v1/oauth2/token")
                                         .post(requestBody)
                                         .build()
-                                    val authData = client.newCall(request).execute().body()?.string()?.let {
+                                    val authData = client.newCall(request).execute().body?.string()?.let {
                                         Gson().fromJson(it, AuthData::class.java)
                                     } ?: AuthData()
 

@@ -1,5 +1,6 @@
 package com.raduitache.myanimelist.seasonal
 
+import java.time.Year
 import java.time.YearMonth
 import java.util.TimeZone
 
@@ -18,7 +19,22 @@ enum class Season {
         }
     }
 
+    fun previous(year: Int): Pair<Season, Int> {
+        var returnableYear = year
+        return Pair(when (this) {
+            WINTER -> {
+                returnableYear -=1
+                FALL
+            }
+            SPRING -> WINTER
+            SUMMER -> SPRING
+            FALL -> SUMMER
+        }, returnableYear)
+    }
+
     companion object {
+        fun currentYear() = Year.now(TimeZone.getDefault().toZoneId()).value
+
         fun current(): Season {
             val currentMonth = YearMonth.now(TimeZone.getDefault().toZoneId()).monthValue
 
@@ -28,6 +44,15 @@ enum class Season {
                 in 9..11 -> FALL
                 else -> WINTER
             }
+        }
+
+        fun generateLastSeasons(howMany: Int, currentSeason: Season = current(), currentYear: Int = currentYear()): List<Pair<Season, Int>> {
+            val last = mutableListOf<Pair<Season, Int>>()
+            last += currentSeason.previous(currentYear)
+            for (i in (1..<howMany)) {
+                last.add(last.last().first.previous(last.last().second))
+            }
+            return last
         }
     }
 }

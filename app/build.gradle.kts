@@ -97,6 +97,7 @@ dependencies {
     implementation(libs.androidx.room.paging)
 
     implementation (libs.argon2kt)
+    implementation(libs.coil.compose)
     kapt(libs.dagger.hilt.compiler)
     testImplementation(libs.junit)
     kaptTest(libs.dagger.hilt.compiler)
