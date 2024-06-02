@@ -9,22 +9,23 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun MainNavigation(viewModel: MainNavigationViewModel = hiltViewModel()) {
-    val navController = viewModel.navController
+    val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
     Scaffold(
         bottomBar = {
-            if (!viewModel.mainNavGraphs.map { it.graphRoute.route }
-                    .contains(currentBackStackEntry?.destination?.route)) return@Scaffold
+            if (!viewModel.mainNavGraphs.map { it.graphRoute.route }.any { currentBackStackEntry?.destination?.route?.startsWith(it) == true }) return@Scaffold
 
             NavigationBar {
-                for (navGraph in viewModel.mainNavGraphs) {
+                for (navGraph in viewModel.mainNavGraphs.sortedBy { it.navItemIndex }) {
                     navGraph.NavigationItem(
-                        selected = currentBackStackEntry?.destination?.route == navGraph.graphRoute.route,
-                        rowScope = this
+                        selected = currentBackStackEntry?.destination?.route?.startsWith(navGraph.graphRoute.route) == true,
+                        rowScope = this,
+                        navController = navController,
                     )
                 }
             }
@@ -36,7 +37,7 @@ fun MainNavigation(viewModel: MainNavigationViewModel = hiltViewModel()) {
             modifier = Modifier.padding(it)
         ) {
             for (navGraph in viewModel.navGraphs) {
-                navGraph.addToNavGraph(this)
+                navGraph.addToNavGraph(this, navController)
             }
         }
     }

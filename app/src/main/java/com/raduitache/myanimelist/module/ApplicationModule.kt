@@ -1,31 +1,45 @@
 package com.raduitache.myanimelist.module
 
-import android.content.Context
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.ComposeNavigator
-import androidx.navigation.compose.DialogNavigator
-import dagger.Binds
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.map
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class ApplicationModule {
-    @Binds
+object ApplicationModule {
+    @Provides
     @Singleton
-    abstract fun provideNavController(host: NavHostController): NavController
-
-    companion object {
-        @Provides
-        @Singleton
-        fun provideNavHostController(@ApplicationContext context: Context) = NavHostController(context).apply {
-            navigatorProvider.addNavigator(ComposeNavigator())
-            navigatorProvider.addNavigator(DialogNavigator())
+    fun provideCurrentUser(): Flow<FirebaseUser?> = callbackFlow {
+        val stateListener = FirebaseAuth.AuthStateListener { auth ->
+            trySend(auth.currentUser)
+        }
+        Firebase.auth.addAuthStateListener(stateListener)
+        awaitClose {
+            Firebase.auth.removeAuthStateListener(stateListener)
         }
     }
+
+    @Provides
+    @Singleton
+    fun provideDatabaseReference(currentUser: Flow<@JvmSuppressWildcards FirebaseUser?>): Flow<DatabaseReference?> =
+        currentUser
+            .map { user ->
+                if (user == null) return@map null
+                Firebase.database("https://myanimelist-69e80-default-rtdb.europe-west1.firebasedatabase.app/")
+                    .reference
+                    .child("users")
+                    .child(user.uid)
+            }
 }
