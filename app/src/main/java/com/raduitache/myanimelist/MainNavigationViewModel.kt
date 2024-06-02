@@ -10,7 +10,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainNavigationViewModel @Inject constructor(
-    internal val navController: NavHostController,
     internal val startDestination: SeasonalNavGraph,
     internal val mainNavGraphs: Set<@JvmSuppressWildcards MainNavGraph>,
     internal val navGraphs: Set<@JvmSuppressWildcards NavGraph>

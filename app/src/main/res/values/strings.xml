@@ -2,4 +2,8 @@
     <string name="app_name">My Anime List</string>
     <string name="home_title">Home</string>
     <string name="seasonal_title">Seasonal</string>
+    <string name="my_list_title">My List</string>
+    <string name="sign_in_label">Sign In is required to access additional content</string>
+    <string name="sign_in_button_label">Sign In</string>
+    <string name="generic_error_title">Something went wrong</string>
 </resources>

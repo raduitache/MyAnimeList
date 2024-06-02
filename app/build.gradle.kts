@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.hilt)
     alias(libs.plugins.org.jetbrains.kotlin.kapt)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -70,6 +71,9 @@ dependencies {
     implementation(libs.androidx.hilt.navigation)
     implementation(libs.androidx.paging.common.ktx)
     implementation(libs.androidx.paging.compose)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.database)
     kapt(libs.dagger.hilt.compiler)
     testImplementation(libs.junit)
     kaptTest(libs.dagger.hilt.compiler)
