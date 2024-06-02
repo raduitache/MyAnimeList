@@ -17,10 +17,11 @@ import javax.inject.Inject
 class AuthNavGraphImpl @Inject constructor(
     graphRoute: AuthGraphRoute,
     private val startDestination: AuthNavRoute,
-    private val navController: NavController,
 ) : AuthNavGraph(graphRoute, startDestination) {
+    override val navItemIndex: Int = 0
+
     @Composable
-    override fun NavigationItem(selected: Boolean, rowScope: RowScope) {
+    override fun NavigationItem(selected: Boolean, rowScope: RowScope, navController: NavController) {
         val label = "auth"
 
         MainNavigationBarItem(
@@ -32,7 +33,7 @@ class AuthNavGraphImpl @Inject constructor(
         )
     }
 
-    override fun NavGraphBuilder.buildNestedNavGraph() {
+    override fun NavGraphBuilder.buildNestedNavGraph(navController: NavController) {
         composable(startDestination.route, startDestination.namedNavArgs) {
             startDestination.Content()
         }
