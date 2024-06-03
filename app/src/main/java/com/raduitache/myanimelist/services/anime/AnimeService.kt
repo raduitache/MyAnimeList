@@ -19,4 +19,10 @@ interface AnimeService {
         @Query("limit") limit: Int = ServicesConstants.REQUEST_ITEM_COUNT,
         @Query("sort") sort: String
     ): Call<Response<Anime>>
+
+    @GET("anime/{anime_id}")
+    fun getSeasonalAnime(
+        @Path("anime_id") animeId: String,
+        @Query("fields") fields: String,
+    ): Call<Anime>
 }

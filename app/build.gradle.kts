@@ -98,6 +98,7 @@ dependencies {
 
     implementation (libs.argon2kt)
     implementation(libs.coil.compose)
+    implementation(libs.logging.interceptor)
     kapt(libs.dagger.hilt.compiler)
     testImplementation(libs.junit)
     kaptTest(libs.dagger.hilt.compiler)

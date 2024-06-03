@@ -34,7 +34,7 @@ import coil.compose.AsyncImage
 import com.raduitache.myanimelist.seasonal.Season
 
 @Composable
-fun SeasonalScreen(viewModel: SeasonalViewModel = hiltViewModel()) {
+fun SeasonalScreen(goNext: (String) -> Unit, viewModel: SeasonalViewModel = hiltViewModel()) {
     val lazyPagingItems = viewModel.pager.collectAsLazyPagingItems()
     val screenState = viewModel.screenState.collectAsState().value
     var isExpanded by remember {
@@ -91,6 +91,9 @@ fun SeasonalScreen(viewModel: SeasonalViewModel = hiltViewModel()) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .clickable {
+                            goNext(item?.id.toString())
+                        }
                         .padding(4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween

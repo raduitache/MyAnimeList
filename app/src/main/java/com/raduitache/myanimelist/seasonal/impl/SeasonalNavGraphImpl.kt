@@ -6,10 +6,16 @@ import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.raduitache.myanimelist.R
+import com.raduitache.myanimelist.anime_details.AnimeDetailsScreen
+import com.raduitache.myanimelist.anime_details.AnimeDetailsViewModel
 import com.raduitache.myanimelist.navigation.ui.MainNavigationBarItem
 import com.raduitache.myanimelist.seasonal.SeasonalGraphRoute
 import com.raduitache.myanimelist.seasonal.SeasonalNavGraph
@@ -37,7 +43,20 @@ class SeasonalNavGraphImpl @Inject constructor(
 
     override fun NavGraphBuilder.buildNestedNavGraph(navController: NavController) {
         composable(startDestination.route, startDestination.namedNavArgs) {
-            startDestination.Content()
+            startDestination.Content {
+                navController.navigate("details/$it")
+            }
         }
+        composable(
+            "details/{details}",
+            arguments = listOf(navArgument("details") {type = NavType.StringType})
+        ) { backStackEntry ->
+            val animeDetailsViewModel = hiltViewModel<AnimeDetailsViewModel>()
+            backStackEntry.arguments?.getString("details")?.let { animeDetailsViewModel.selectAnime(it) }
+            AnimeDetailsScreen(animeDetailsViewModel) {
+                navController.popBackStack()
+            }
+        }
+
     }
 }

@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class SeasonalNavRouteImpl @Inject constructor(): SeasonalNavRoute("seasonal/seasonal-screen", emptyList()){
     @Composable
-    override fun Content() {
-        SeasonalScreen()
+    override fun Content(goToDetails: (String) -> Unit) {
+        SeasonalScreen(goToDetails)
     }
 }
