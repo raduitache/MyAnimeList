@@ -74,6 +74,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
+    implementation(libs.coil.compose)
     kapt(libs.dagger.hilt.compiler)
     testImplementation(libs.junit)
     kaptTest(libs.dagger.hilt.compiler)

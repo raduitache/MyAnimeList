@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -81,7 +82,7 @@ class SignInViewModel @Inject constructor(
 
         val httpClient = OkHttpClient()
         val requestBody = RequestBody.create(
-            MediaType.parse("application/x-www-form-urlencoded"),
+            "application/x-www-form-urlencoded".toMediaTypeOrNull(),
             "client_id=98ed5bd620cb5e1182e416e994b5b62f" +
                     "&client_secret=82c79106d56636edb358e5045db6f2985e243d3509c7f41e507dda9180024b07" +
                     "&grant_type=authorization_code" +
@@ -100,7 +101,7 @@ class SignInViewModel @Inject constructor(
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val authResponse = response.body()?.string()?.let {
+                val authResponse = response.body?.string()?.let {
                     Gson().fromJson(it, AuthResponse::class.java)
                 }
                 if (authResponse == null) {
@@ -128,7 +129,7 @@ class SignInViewModel @Inject constructor(
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val user = response.body()?.string()?.let {
+                val user = response.body?.string()?.let {
                     Gson().fromJson(it, User::class.java)
                 }
                 if (user == null) {
@@ -147,7 +148,7 @@ class SignInViewModel @Inject constructor(
                     }
 
                     override fun onResponse(call: Call, response: Response) {
-                        val token = response.body()?.string()
+                        val token = response.body?.string()
                         if (token == null) {
                             completionState.value =
                                 Result.failure(IOException("Failed to parse user token"))
