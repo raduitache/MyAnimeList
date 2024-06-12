@@ -1,13 +1,13 @@
 package com.raduitache.myanimelist.responses
 
+import com.google.gson.annotations.SerializedName
+
 data class Response<T>(
-    private val data: List<DataItem<T>>,
+    val data: List<DataItem<T>>,
     val paging: Paging
 ) {
     data class DataItem<K>(
-        val node: K
+        val node: K,
+        @SerializedName("list_status") val listStatus: ListStatus? = null
     )
-
-    val values: List<T>
-        get() = data.map { it.node }
 }

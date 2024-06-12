@@ -2,6 +2,13 @@ package com.raduitache.myanimelist.services.module
 
 import android.content.Context
 import android.net.Uri
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.migrations.SharedPreferencesMigration
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.snapshots
@@ -13,13 +20,16 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -120,4 +130,16 @@ object ServicesModule {
         context,
         AppDatabase::class.java, "database-name"
     ).fallbackToDestructiveMigration().build()
+
+    @Singleton
+    @Provides
+    fun providePreferencesDataStore(appContext: Context): DataStore<Preferences> {
+        return PreferenceDataStoreFactory.create(
+            corruptionHandler = ReplaceFileCorruptionHandler(
+                produceNewData = { emptyPreferences() }
+            ),
+            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+            produceFile = { appContext.preferencesDataStoreFile("prefs") }
+        )
+    }
 }

@@ -80,6 +80,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
+    implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.room.compiler3)

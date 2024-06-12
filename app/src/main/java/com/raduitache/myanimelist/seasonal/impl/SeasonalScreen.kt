@@ -36,7 +36,7 @@ import com.raduitache.myanimelist.seasonal.Season
 @Composable
 fun SeasonalScreen(goNext: (String) -> Unit, viewModel: SeasonalViewModel = hiltViewModel()) {
     val lazyPagingItems = viewModel.pager.collectAsLazyPagingItems()
-    val screenState = viewModel.screenState.collectAsState().value
+    val screenState = viewModel.screenState.collectAsState(SeasonalScreenState()).value
     var isExpanded by remember {
         mutableStateOf(false)
     }
@@ -66,7 +66,7 @@ fun SeasonalScreen(goNext: (String) -> Unit, viewModel: SeasonalViewModel = hilt
                         DropdownMenu(
                             expanded = isExpanded,
                             onDismissRequest = { isExpanded = false }) {
-                            for (i in viewModel.generateLastSeasons()) {
+                            for (i in screenState.lastSeasons) {
                                 SeasonText(
                                     season = i.first,
                                     year = i.second,

@@ -18,25 +18,27 @@ data class Anime(
     val genres: List<Genre>,
     val synopsis: String?,
     @SerializedName("num_episodes")
-    val num_episodes: String,
+    val numEpisodes: Int,
     val status: String,
     @SerializedName("my_list_status")
     val myList: MyListStatus?,
     val pictures: List<MainPicture>,
+    @SerializedName("media_type") val mediaType: String = "",
+    @SerializedName("start_season") val startSeason: StartSeason? = null,
     val statistics: Statistics
 )
 
-data class MainPicture (
+data class MainPicture(
     val large: String?,
     val medium: String?
 )
 
-data class MyListStatus (
+data class MyListStatus(
     val status: String,
     val score: Int?,
 )
 
-data class Statistics (
+data class Statistics(
     val num_list_users: Int,
     @SerializedName("status")
     val from: From

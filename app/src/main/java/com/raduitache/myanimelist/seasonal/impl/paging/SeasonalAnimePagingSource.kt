@@ -28,10 +28,10 @@ class SeasonalAnimePagingSource(
             page = params.key?.let { it * params.loadSize } ?: 0,
             sort = sorting.name.lowercase()
         ).await()
-        Log.w("AnimePagingSource", seasonalAnime.values.first().toString())
+        Log.w("AnimePagingSource", seasonalAnime.data.first().toString())
 
         return LoadResult.Page(
-            data = seasonalAnime.values,
+            data = seasonalAnime.data.map { it.node },
             prevKey = seasonalAnime.paging.previous?.let { params.key?.dec() },
             nextKey = seasonalAnime.paging.next?.let { params.key?.inc() },
         )

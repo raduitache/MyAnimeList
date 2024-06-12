@@ -2,6 +2,7 @@ package com.raduitache.myanimelist.auth.impl
 
 import android.widget.Button
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
@@ -45,6 +47,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.raduitache.myanimelist.BuildConfig
 import com.raduitache.myanimelist.R
 import com.raduitache.myanimelist.auth.AuthNavRoute
+import com.raduitache.myanimelist.seasonal.impl.SeasonalViewModel
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 import kotlin.math.min
@@ -178,7 +181,9 @@ class AuthNavRouteImpl @Inject constructor() : AuthNavRoute("auth/auth-screen", 
                     }
                     if (BuildConfig.DEBUG) {
                         AndroidView(
-                            modifier = Modifier.widthIn(max = 128.dp).heightIn(max = 128.dp), // Occupy the max size in the Compose UI tree
+                            modifier = Modifier
+                                .widthIn(max = 128.dp)
+                                .heightIn(max = 128.dp), // Occupy the max size in the Compose UI tree
                             factory = { context ->
                                 // Creates view
                                 Button(context).apply {
@@ -213,6 +218,7 @@ class AuthNavRouteImpl @Inject constructor() : AuthNavRoute("auth/auth-screen", 
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState())
                             .padding(4.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
