@@ -193,9 +193,6 @@ class AuthNavRouteImpl @Inject constructor() : AuthNavRoute("auth/auth-screen", 
                     Button(onClick = { authViewModel.toggleSigningUp() }) {
                         Text("L2")
                     }
-                    Button(onClick = { /*TODO*/ }) {
-                        Text("L3")
-                    }
                     if (BuildConfig.DEBUG) {
                         AndroidView(
                             modifier = Modifier
