@@ -1,6 +1,7 @@
 package com.raduitache.myanimelist.auth.impl
 
 import android.widget.Button
+import android.widget.TextView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -43,6 +44,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.raduitache.myanimelist.BuildConfig
 import com.raduitache.myanimelist.R
@@ -170,9 +172,24 @@ class AuthNavRouteImpl @Inject constructor() : AuthNavRoute("auth/auth-screen", 
                     horizontalArrangement = Arrangement.SpaceAround,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Button(onClick = { /*TODO*/ }) {
-                        Text("L1")
-                    }
+                    AndroidView(
+                        modifier = Modifier
+                            .widthIn(max = 128.dp)
+                            .heightIn(max = 128.dp),
+                        factory = { context ->
+                            Button(
+                                context
+                            ).apply {
+                                text = context.getString(R.string.random_text)
+                                setOnClickListener {
+                                    println("Asd")
+                                }
+                                setTextColor(
+                                    ContextCompat.getColorStateList(context,R.color.pressing_colors)
+                                )
+                            }
+                        },
+                    )
                     Button(onClick = { authViewModel.toggleSigningUp() }) {
                         Text("L2")
                     }
@@ -193,7 +210,6 @@ class AuthNavRouteImpl @Inject constructor() : AuthNavRoute("auth/auth-screen", 
                                     setBackgroundResource(R.drawable.selector)
                                 }
                             },
-
                         )
                     }
                 }
