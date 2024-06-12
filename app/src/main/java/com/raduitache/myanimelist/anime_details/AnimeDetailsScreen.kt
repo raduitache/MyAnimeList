@@ -134,7 +134,6 @@ fun AnimeDetailsScreen(animeDetailsViewModel: AnimeDetailsViewModel, onBack: () 
                 AsyncImage(model = it, contentDescription = null, modifier = Modifier.fillMaxSize())
             }
 
-
         }
 
     }

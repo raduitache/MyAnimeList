@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -98,17 +99,7 @@ class AuthNavRouteImpl @Inject constructor() : AuthNavRoute("auth/auth-screen", 
                     label = {
                         Text(text = "Password")
                     },
-                    visualTransformation = { text ->
-                        val transformedText = text.toString()
-                            .mapIndexed { index, c ->
-                                "*"
-                            }
-                            .joinToString("")
-                        TransformedText(
-                            text = AnnotatedString(text = transformedText),
-                            offsetMapping = OffsetMapping.Identity
-                        )
-                    },
+                    visualTransformation = PasswordVisualTransformation(),
                     onValueChange = {
                         password = it
 
@@ -161,7 +152,6 @@ class AuthNavRouteImpl @Inject constructor() : AuthNavRoute("auth/auth-screen", 
                     )
                     LaunchedEffect(key1 = Unit) {
                         delay(1500)
-
                     }
                 }
 
@@ -244,12 +234,8 @@ class AuthNavRouteImpl @Inject constructor() : AuthNavRoute("auth/auth-screen", 
                             maxLines = 1, modifier = Modifier.weight(1f)
                         )
                     }
-
                 }
             }
-
         }
-
-
     }
 }

@@ -25,11 +25,21 @@ class AnimeDetailsViewModel @Inject constructor(
 
     fun selectAnime(id: String) {
         viewModelScope.launch {
-            val service = animeServiceFlow.firstOrNull() ?: return@launch
-            val animeDetails = service.getSeasonalAnime(id, fields= "id,title,main_picture,alternative_titles,start_date,end_date,synopsis,mean,rank,popularity,num_list_users,num_scoring_users,nsfw,created_at,updated_at,media_type,status,genres,my_list_status,num_episodes,start_season,broadcast,source,average_episode_duration,rating,pictures,background,related_anime,related_manga,recommendations,studios,statistics").await()
             _animeDetailsScreenState.update {
-                it.copy(isLoading = false, selectedAnime = animeDetails)
+                it.copy(isLoading = true)
             }
+            try {
+                val service = animeServiceFlow.firstOrNull() ?: return@launch
+                val animeDetails = service.getSeasonalAnime(id, fields= "id,title,main_picture,alternative_titles,start_date,end_date,synopsis,mean,rank,popularity,num_list_users,num_scoring_users,nsfw,created_at,updated_at,media_type,status,genres,my_list_status,num_episodes,start_season,broadcast,source,average_episode_duration,rating,pictures,background,related_anime,related_manga,recommendations,studios,statistics").await()
+                _animeDetailsScreenState.update {
+                    it.copy(isLoading = false, selectedAnime = animeDetails)
+                }
+            } catch (e: Exception) {
+                _animeDetailsScreenState.update {
+                    it.copy(isLoading = false)
+                }
+            }
+
         }
     }
 
