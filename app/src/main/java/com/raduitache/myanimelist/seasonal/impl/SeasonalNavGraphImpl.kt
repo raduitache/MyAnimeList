@@ -20,6 +20,7 @@ import com.raduitache.myanimelist.navigation.ui.MainNavigationBarItem
 import com.raduitache.myanimelist.seasonal.SeasonalGraphRoute
 import com.raduitache.myanimelist.seasonal.SeasonalNavGraph
 import com.raduitache.myanimelist.seasonal.SeasonalNavRoute
+import com.raduitache.myanimelist.settings.SettingsScreen
 import javax.inject.Inject
 
 class SeasonalNavGraphImpl @Inject constructor(
@@ -56,6 +57,9 @@ class SeasonalNavGraphImpl @Inject constructor(
             AnimeDetailsScreen(animeDetailsViewModel) {
                 navController.popBackStack()
             }
+        }
+        composable("settings") {
+            SettingsScreen()
         }
 
     }
