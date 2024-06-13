@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+<item>
+    <shape
+        android:shape="oval">
+
+        <gradient
+            android:startColor="#B7245C"
+            android:endColor="#7c3238"
+            android:angle="45"/>
+
+        <padding
+            android:left="8dp"
+            android:top="8dp"
+            android:right="8dp"
+            android:bottom="8dp"/>
+
+        <stroke
+            android:width="3dp"
+            android:color="#000000"/>
+    </shape>
+</item>
+<item android:drawable="@drawable/racoon_pedro" android:width="108dp" android:height="108dp" />
+
+</layer-list>

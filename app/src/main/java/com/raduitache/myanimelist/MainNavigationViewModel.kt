@@ -1,7 +1,6 @@
 package com.raduitache.myanimelist
 
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavHostController
 import com.raduitache.myanimelist.main.NavGraph
 import com.raduitache.myanimelist.navigation.MainNavGraph
 import com.raduitache.myanimelist.seasonal.SeasonalNavGraph

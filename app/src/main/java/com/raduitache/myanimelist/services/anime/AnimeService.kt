@@ -2,6 +2,7 @@ package com.raduitache.myanimelist.services.anime
 
 import com.raduitache.myanimelist.responses.Anime
 import com.raduitache.myanimelist.responses.Response
+import com.raduitache.myanimelist.responses.Sorting
 import com.raduitache.myanimelist.seasonal.Season
 import com.raduitache.myanimelist.services.ServicesConstants
 import retrofit2.Call
@@ -15,6 +16,13 @@ interface AnimeService {
         @Path("year") year: Int,
         @Path("season") season: Season,
         @Query("offset") page: Int = 0,
-        @Query("limit") limit: Int = ServicesConstants.REQUEST_ITEM_COUNT
+        @Query("limit") limit: Int = ServicesConstants.REQUEST_ITEM_COUNT,
+        @Query("sort") sort: String
     ): Call<Response<Anime>>
+
+    @GET("anime/{anime_id}")
+    fun getSeasonalAnime(
+        @Path("anime_id") animeId: String,
+        @Query("fields") fields: String,
+    ): Call<Anime>
 }

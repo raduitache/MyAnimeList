@@ -6,5 +6,5 @@ import com.raduitache.myanimelist.navigation.NavRoute
 
 abstract class SeasonalNavRoute(route: String, namedNavArgs: List<NamedNavArgument>): NavRoute(route, namedNavArgs){
     @Composable
-    abstract fun Content()
+    abstract fun Content(goToDetails: (String) -> Unit)
 }

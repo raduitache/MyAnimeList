@@ -23,7 +23,10 @@ fun MainNavigationBarItem(
 ) {
     rowScope.NavigationBarItem(
         selected = selected,
-        onClick = onClick,
+        onClick = {
+            if (selected) return@NavigationBarItem
+            onClick.invoke()
+        },
         icon = {
             Icon(painter = icon, contentDescription = null)
         },
