@@ -56,7 +56,7 @@ fun SettingsScreen(
 
 }
 
-const val PREF_SELECTED_DARK_MODE = "SELECTED_SORT"
+const val PREF_SELECTED_DARK_MODE = "PREF_SELECTED_DARK_MODE"
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
