@@ -25,4 +25,11 @@ interface MyListService {
         @Path("anime_id") animeId: Int,
         @Field("num_watched_episodes") watchedEpisodes: Int,
     ): Call<Unit>
+
+    @PATCH("anime/{anime_id}/my_list_status")
+    @FormUrlEncoded
+    fun updateAnimeStatus(
+        @Path("anime_id") animeId: Int,
+        @Field("status") status: String,
+    ): Call<Unit>
 }
