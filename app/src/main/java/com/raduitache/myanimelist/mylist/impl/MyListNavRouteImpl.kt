@@ -14,7 +14,7 @@ class MyListNavRouteImpl @Inject constructor() :
         }
     )) {
     @Composable
-    override fun Content(authScreen: @Composable () -> Unit) {
-        MyListScreen(authScreen)
+    override fun Content(onAnimeClick: (String) -> Unit, authScreen: @Composable () -> Unit) {
+        MyListScreen(onAnimeClick, authScreen)
     }
 }

@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
 data class MyListUiData(
-    val isSignedIn: Boolean = false,
+    val isSignedIn: Boolean = true,
     val pagingDataFlow: Flow<PagingData<Response.DataItem<Anime>>> = emptyFlow()
 )

@@ -1,5 +1,6 @@
 package com.raduitache.myanimelist.mylist.impl
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,18 +32,18 @@ import com.raduitache.myanimelist.responses.Anime
 import com.raduitache.myanimelist.responses.Response
 
 @Composable
-fun MyListScreen(authScreen: @Composable () -> Unit, viewModel: MyListViewModel = hiltViewModel()) {
+fun MyListScreen(onAnimeClick: (String) -> Unit, authScreen: @Composable () -> Unit, viewModel: MyListViewModel = hiltViewModel()) {
     val uiData by viewModel.uiData.collectAsState()
 
     if (uiData.isSignedIn) {
-        ListScreen(uiData, viewModel::updateAnimeProgress)
+        ListScreen(uiData, onAnimeClick, viewModel::updateAnimeProgress)
     } else {
         authScreen()
     }
 }
 
 @Composable
-private fun MyListItem(data: Response.DataItem<Anime>, updateAnimeProgress: (Int, Int) -> Unit) {
+private fun MyListItem(data: Response.DataItem<Anime>, onAnimeClick: (String) -> Unit, updateAnimeProgress: (Int, Int) -> Unit) {
     ListItem(
         headlineContent = {
             Column {
@@ -58,6 +59,7 @@ private fun MyListItem(data: Response.DataItem<Anime>, updateAnimeProgress: (Int
                 )
             }
         },
+        modifier = Modifier.clickable { onAnimeClick(data.node.id.toString()) },
         supportingContent = {
             Column(horizontalAlignment = Alignment.End) {
                 LinearProgressIndicator(
@@ -97,7 +99,7 @@ private fun MyListItem(data: Response.DataItem<Anime>, updateAnimeProgress: (Int
 }
 
 @Composable
-private fun ListScreen(uiData: MyListUiData, updateAnimeProgress: (Int, Int) -> Unit) {
+private fun ListScreen(uiData: MyListUiData, onAnimeClick: (String) -> Unit, updateAnimeProgress: (Int, Int) -> Unit) {
     val pagingData = uiData.pagingDataFlow.collectAsLazyPagingItems()
 
     Scaffold { innerPadding ->
@@ -114,7 +116,7 @@ private fun ListScreen(uiData: MyListUiData, updateAnimeProgress: (Int, Int) -> 
 
             items(pagingData.itemCount) { index ->
                 pagingData[index]?.let {
-                    MyListItem(data = it, updateAnimeProgress = updateAnimeProgress)
+                    MyListItem(data = it,  onAnimeClick = onAnimeClick, updateAnimeProgress = updateAnimeProgress)
                 }
             }
 

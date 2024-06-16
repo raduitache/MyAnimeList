@@ -10,6 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.raduitache.myanimelist.R
+import com.raduitache.myanimelist.anime_details.AnimeGraphRoute
 import com.raduitache.myanimelist.auth.AuthNavRoute
 import com.raduitache.myanimelist.mylist.MyListGraphRoute
 import com.raduitache.myanimelist.mylist.MyListNavGraph
@@ -22,7 +23,8 @@ class MyListNavGraphImpl @Inject constructor(
     graphRoute: MyListGraphRoute,
     private val startDestination: MyListNavRoute,
     private val authNavRoute: AuthNavRoute,
-    private val signInGraphRoute: SignInGraphRoute
+    private val signInGraphRoute: SignInGraphRoute,
+    private val animeDetailsGraphRoute: AnimeGraphRoute,
 ) : MyListNavGraph(graphRoute, startDestination) {
     override val navItemIndex: Int = 2
 
@@ -45,7 +47,11 @@ class MyListNavGraphImpl @Inject constructor(
 
     override fun NavGraphBuilder.buildNestedNavGraph(navController: NavController) {
         composable(startDestination.route, startDestination.namedNavArgs) {
-            startDestination.Content {
+            startDestination.Content(onAnimeClick = { animeId ->
+                navController.navigate(
+                    animeDetailsGraphRoute.navigateToAnimeDetails(animeId)
+                )
+            }) {
                 authNavRoute.Content {
                     navController.navigate(signInGraphRoute.route)
                 }

@@ -1,10 +1,9 @@
-package com.raduitache.myanimelist.anime_details
+package com.raduitache.myanimelist.anime_details.impl
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,15 +33,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ModifierInfo
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AnimeDetailsScreen(animeDetailsViewModel: AnimeDetailsViewModel, onBack: () -> Unit) {
+fun AnimeDetailsScreen(onBack: () -> Unit, animeDetailsViewModel: AnimeDetailsViewModel = hiltViewModel()) {
     val screenState = animeDetailsViewModel.animeDetailsScreenState.collectAsState().value
     if (screenState.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -109,7 +107,9 @@ fun AnimeDetailsScreen(animeDetailsViewModel: AnimeDetailsViewModel, onBack: () 
                     modifier = Modifier.padding(start = 4.dp)
                 ) {
                     items(list.filter { it != selectedAnime.mainPicture }) {
-                        AsyncImage(model = it.medium, contentDescription = null, modifier = Modifier.padding(horizontal = 4.dp).clickable { selectedImage = it.medium })
+                        AsyncImage(model = it.medium, contentDescription = null, modifier = Modifier
+                            .padding(horizontal = 4.dp)
+                            .clickable { selectedImage = it.medium })
                     }
                 }
             }
@@ -124,13 +124,16 @@ fun AnimeDetailsScreen(animeDetailsViewModel: AnimeDetailsViewModel, onBack: () 
             Text(text = "on_hold = ${selectedAnime.statistics.from.on_hold}")
         }
         selectedImage?.let {
-            Box(modifier = Modifier.fillMaxSize()
+            Box(modifier = Modifier
+                .fillMaxSize()
                 .clickable(interactionSource = remember {
                     MutableInteractionSource()
                 }, indication = null, onClick = {
                     selectedImage = null
-                }).background(
-                Color.Black.copy(alpha = 0.8f))) {
+                })
+                .background(
+                    Color.Black.copy(alpha = 0.8f)
+                )) {
                 AsyncImage(model = it, contentDescription = null, modifier = Modifier.fillMaxSize())
             }
 

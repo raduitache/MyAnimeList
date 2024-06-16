@@ -1,5 +1,7 @@
 package com.raduitache.myanimelist
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -29,13 +31,15 @@ fun MainNavigation(viewModel: MainNavigationViewModel = hiltViewModel()) {
         topBar = {
             if (currentBackStackEntry?.destination?.route?.contains("settings") == true) {
                 TopAppBar(title = {
-                                  Text(text = "Settings")
+                    Text(text = "Settings")
                 }, navigationIcon = {
-                    IconButton(onClick = {navController.popBackStack()}) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
                     }
                 })
             } else {
+                if (!viewModel.mainNavGraphs.map { it.graphRoute.route }
+                        .any { currentBackStackEntry?.destination?.route?.startsWith(it) == true }) return@Scaffold
                 TopAppBar(title = {
 
                 }, actions = {
@@ -48,8 +52,11 @@ fun MainNavigation(viewModel: MainNavigationViewModel = hiltViewModel()) {
             }
         },
         bottomBar = {
-            if (!viewModel.mainNavGraphs.map { it.graphRoute.route }.any { currentBackStackEntry?.destination?.route?.startsWith(it) == true }) return@Scaffold
-            if (currentBackStackEntry?.destination?.route?.contains("settings") == true) { return@Scaffold }
+            if (!viewModel.mainNavGraphs.map { it.graphRoute.route }
+                    .any { currentBackStackEntry?.destination?.route?.startsWith(it) == true }) return@Scaffold
+            if (currentBackStackEntry?.destination?.route?.contains("settings") == true) {
+                return@Scaffold
+            }
             NavigationBar {
                 for (navGraph in viewModel.mainNavGraphs.sortedBy { it.navItemIndex }) {
                     navGraph.NavigationItem(
