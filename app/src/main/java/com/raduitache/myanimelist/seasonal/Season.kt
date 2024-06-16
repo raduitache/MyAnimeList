@@ -1,5 +1,7 @@
 package com.raduitache.myanimelist.seasonal
 
+import com.raduitache.myanimelist.responses.Sorting
+import kotlinx.coroutines.flow.first
 import java.time.Year
 import java.time.YearMonth
 import java.util.TimeZone
@@ -21,15 +23,18 @@ enum class Season {
 
     fun previous(year: Int): Pair<Season, Int> {
         var returnableYear = year
-        return Pair(when (this) {
-            WINTER -> {
-                returnableYear -=1
-                FALL
-            }
-            SPRING -> WINTER
-            SUMMER -> SPRING
-            FALL -> SUMMER
-        }, returnableYear)
+        return Pair(
+            when (this) {
+                WINTER -> {
+                    returnableYear -= 1
+                    FALL
+                }
+
+                SPRING -> WINTER
+                SUMMER -> SPRING
+                FALL -> SUMMER
+            }, returnableYear
+        )
     }
 
     companion object {
@@ -46,7 +51,11 @@ enum class Season {
             }
         }
 
-        fun generateLastSeasons(howMany: Int, currentSeason: Season = current(), currentYear: Int = currentYear()): List<Pair<Season, Int>> {
+        fun generateLastSeasons(
+            howMany: Int,
+            currentSeason: Season = current(),
+            currentYear: Int = currentYear()
+        ): List<Pair<Season, Int>> {
             val last = mutableListOf<Pair<Season, Int>>()
             last += currentSeason.previous(currentYear)
             for (i in (1..<howMany)) {
@@ -55,4 +64,22 @@ enum class Season {
             return last
         }
     }
+}
+
+
+enum class WatchingState {
+    watching,
+    completed,
+    on_hold,
+    dropped,
+    plan_to_watch;
+
+    fun next() = try {
+        val toTypedArray = WatchingState.entries.toTypedArray()
+        val currentIndex = toTypedArray.indexOf(this)
+        toTypedArray[currentIndex + 1]
+    } catch (_: Exception) {
+        watching
+    }
+
 }
