@@ -1,5 +1,6 @@
-package com.raduitache.myanimelist.anime_details
+package com.raduitache.myanimelist.anime_details.impl
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raduitache.myanimelist.responses.Anime
@@ -8,8 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -18,12 +17,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AnimeDetailsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val animeServiceFlow: Flow<@JvmSuppressWildcards AnimeService>
 ) : ViewModel() {
+    private val id: String = checkNotNull(savedStateHandle["animeId"]) {
+        "Invalid animeId parameter provided"
+    }
     private val _animeDetailsScreenState = MutableStateFlow(AnimeDetailsScreenState())
     val animeDetailsScreenState = _animeDetailsScreenState.asStateFlow()
 
-    fun selectAnime(id: String) {
+    init {
         viewModelScope.launch {
             _animeDetailsScreenState.update {
                 it.copy(isLoading = true)
@@ -39,7 +42,6 @@ class AnimeDetailsViewModel @Inject constructor(
                     it.copy(isLoading = false)
                 }
             }
-
         }
     }
 

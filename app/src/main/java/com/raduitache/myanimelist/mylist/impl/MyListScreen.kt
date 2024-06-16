@@ -1,6 +1,6 @@
 package com.raduitache.myanimelist.mylist.impl
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,47 +17,33 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
-import com.raduitache.myanimelist.R
 import com.raduitache.myanimelist.responses.Anime
 import com.raduitache.myanimelist.responses.Response
 
 @Composable
-fun MyListScreen(signIn: () -> Unit, viewModel: MyListViewModel = hiltViewModel()) {
+fun MyListScreen(onAnimeClick: (String) -> Unit, authScreen: @Composable () -> Unit, viewModel: MyListViewModel = hiltViewModel()) {
     val uiData by viewModel.uiData.collectAsState()
 
     if (uiData.isSignedIn) {
-        ListScreen(uiData, viewModel::updateAnimeProgress)
+        ListScreen(uiData, onAnimeClick, viewModel::updateAnimeProgress)
     } else {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Column(
-                modifier = Modifier.align(Alignment.Center),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = stringResource(id = R.string.sign_in_label))
-
-                TextButton(onClick = signIn) {
-                    Text(text = stringResource(id = R.string.sign_in_button_label))
-                }
-            }
-        }
+        authScreen()
     }
 }
 
 @Composable
-private fun MyListItem(data: Response.DataItem<Anime>, updateAnimeProgress: (Int, Int) -> Unit) {
+private fun MyListItem(data: Response.DataItem<Anime>, onAnimeClick: (String) -> Unit, updateAnimeProgress: (Int, Int) -> Unit) {
     ListItem(
         headlineContent = {
             Column {
@@ -73,6 +59,7 @@ private fun MyListItem(data: Response.DataItem<Anime>, updateAnimeProgress: (Int
                 )
             }
         },
+        modifier = Modifier.clickable { onAnimeClick(data.node.id.toString()) },
         supportingContent = {
             Column(horizontalAlignment = Alignment.End) {
                 LinearProgressIndicator(
@@ -112,7 +99,7 @@ private fun MyListItem(data: Response.DataItem<Anime>, updateAnimeProgress: (Int
 }
 
 @Composable
-private fun ListScreen(uiData: MyListUiData, updateAnimeProgress: (Int, Int) -> Unit) {
+private fun ListScreen(uiData: MyListUiData, onAnimeClick: (String) -> Unit, updateAnimeProgress: (Int, Int) -> Unit) {
     val pagingData = uiData.pagingDataFlow.collectAsLazyPagingItems()
 
     Scaffold { innerPadding ->
@@ -129,7 +116,7 @@ private fun ListScreen(uiData: MyListUiData, updateAnimeProgress: (Int, Int) -> 
 
             items(pagingData.itemCount) { index ->
                 pagingData[index]?.let {
-                    MyListItem(data = it, updateAnimeProgress = updateAnimeProgress)
+                    MyListItem(data = it,  onAnimeClick = onAnimeClick, updateAnimeProgress = updateAnimeProgress)
                 }
             }
 

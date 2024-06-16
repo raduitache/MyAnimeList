@@ -22,10 +22,6 @@ interface AuthModule {
     fun bindSeasonalNavGraphToNavGraphs(impl: AuthNavGraphImpl): NavGraph
 
     @Binds
-    @IntoSet
-    fun bindSeasonalNavGraphToMainNavGraphs(impl: AuthNavGraphImpl): MainNavGraph
-
-    @Binds
     fun bindSeasonalNavGraph(impl: AuthNavGraphImpl): AuthNavGraph
 
     @Binds
