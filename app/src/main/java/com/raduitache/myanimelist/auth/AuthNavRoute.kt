@@ -6,5 +6,5 @@ import com.raduitache.myanimelist.navigation.NavRoute
 
 abstract class AuthNavRoute(route: String, namedNavArgs: List<NamedNavArgument>): NavRoute(route, namedNavArgs){
     @Composable
-    abstract fun Content()
+    abstract fun Content(onSignIn: () -> Unit)
 }

@@ -12,10 +12,12 @@ import com.raduitache.myanimelist.auth.AuthGraphRoute
 import com.raduitache.myanimelist.auth.AuthNavGraph
 import com.raduitache.myanimelist.auth.AuthNavRoute
 import com.raduitache.myanimelist.navigation.ui.MainNavigationBarItem
+import com.raduitache.myanimelist.signin.SignInGraphRoute
 import javax.inject.Inject
 
 class AuthNavGraphImpl @Inject constructor(
     graphRoute: AuthGraphRoute,
+    private val signInGraphRoute: SignInGraphRoute,
     private val startDestination: AuthNavRoute,
 ) : AuthNavGraph(graphRoute, startDestination) {
     override val navItemIndex: Int = 0
@@ -35,7 +37,9 @@ class AuthNavGraphImpl @Inject constructor(
 
     override fun NavGraphBuilder.buildNestedNavGraph(navController: NavController) {
         composable(startDestination.route, startDestination.namedNavArgs) {
-            startDestination.Content()
+            startDestination.Content {
+                navController.navigate(signInGraphRoute.route)
+            }
         }
     }
 }

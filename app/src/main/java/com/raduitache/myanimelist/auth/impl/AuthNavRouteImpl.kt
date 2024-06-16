@@ -58,7 +58,7 @@ import kotlin.math.min
 class AuthNavRouteImpl @Inject constructor() : AuthNavRoute("auth/auth-screen", emptyList()) {
 
     @Composable
-    override fun Content() {
+    override fun Content(onSignIn: () -> Unit) {
         val authViewModel: AuthViewModel = hiltViewModel()
         val state = authViewModel.authViewState.collectAsState().value
 
@@ -150,8 +150,9 @@ class AuthNavRouteImpl @Inject constructor() : AuthNavRoute("auth/auth-screen", 
                         text = "Operation successful, you will be redirected shortly",
                         style = TextStyle(color = MaterialTheme.colorScheme.secondary)
                     )
-                    LaunchedEffect(key1 = Unit) {
+                    LaunchedEffect(Unit) {
                         delay(1500)
+                        onSignIn()
                     }
                 }
 
