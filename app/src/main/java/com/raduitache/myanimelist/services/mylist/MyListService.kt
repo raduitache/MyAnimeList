@@ -17,7 +17,7 @@ interface MyListService {
     fun getMyList(
         @Query("offset") page: Int = 0,
         @Query("limit") limit: Int = ServicesConstants.REQUEST_ITEM_COUNT,
-    ): Call<Response<Anime>>
+    ): Call<Response<Response.DataItem<Anime>>>
 
     @PATCH("anime/{anime_id}/my_list_status")
     @FormUrlEncoded
