@@ -18,7 +18,7 @@ interface AnimeService {
         @Query("offset") page: Int = 0,
         @Query("limit") limit: Int = ServicesConstants.REQUEST_ITEM_COUNT,
         @Query("sort") sort: String
-    ): Call<Response<Anime>>
+    ): Call<Response<Response.DataItem<Anime>>>
 
     @GET("anime/{anime_id}")
     fun getSeasonalAnime(
